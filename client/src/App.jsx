@@ -1,7 +1,13 @@
 import { useState } from "react"
+import { useEffect } from "react"
 
 function App() {
   const [tasks, setTasks] = useState([])//tasksというステートを作成し、初期値は空の配列
+
+   // 初期化処理をuseEffectで実行
+   useEffect(() => {
+    fetchTasks();  // ページ読み込み時にfetchTasksを呼び出す
+  }, []);  // 空の配列を渡すことで、最初のレンダリング時にのみ実行
 
   const fetchTasks = async () => {
     const response = await fetch("http://localhost:8000")//fetch関数を使って、サーバーにリクエストを送信
@@ -18,7 +24,7 @@ function App() {
       },
       body: JSON.stringify({
         title: input.value,
-        completed: false,
+        completed: 0,
       }),
     })
     const data = await response.json()
@@ -30,8 +36,6 @@ function App() {
       
     }
   }
-
-  window.onload = fetchTasks
 
   return (
     <>
